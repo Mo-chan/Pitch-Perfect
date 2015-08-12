@@ -21,7 +21,7 @@ class PlaySoundsViewController: UIViewController {
         audioPlayer.enableRate = true
         audioEngine = AVAudioEngine()
         audioFile = AVAudioFile(forReading: receivedAudio.filePathUrl, error: nil)
-        // Do any additional setup after loading the view.
+      
     }
 
     override func didReceiveMemoryWarning() {
@@ -42,14 +42,13 @@ class PlaySoundsViewController: UIViewController {
         playAudioWithVariablePitch(1000)
     }
     @IBAction func playDarth(sender: UIButton) {
-        
         playAudioWithVariablePitch(-1000)
+        
     }
     
     
     @IBAction func stopAudio(sender: UIButton) {
-        audioPlayer.stop()
-        audioEngine.stop()
+        stopAllAudio()
     }
 
     func playAudioWithVariablePitch(pitch: Float)
@@ -85,6 +84,23 @@ class PlaySoundsViewController: UIViewController {
         audioPlayer.stop()
         audioEngine.stop()
         audioEngine.reset()
+    }
+    
+    func playAudioWithReverb()
+    {
+        stopAllAudio()
+        var audioPlayerNode = AVAudioPlayerNode()
+        audioEngine.attachNode(audioPlayerNode)
+        var audioUnitReverb = AVAudioUnitReverb()
+        audioUnitReverb.loadFactoryPreset(AVAudioUnitReverbPreset(rawValue: 0)!)
+        audioUnitReverb.wetDryMix = 50.0
+        audioEngine.attachNode(audioUnitReverb)
+        audioEngine.connect(audioPlayerNode, to: audioUnitReverb, format: nil)
+        audioEngine.connect(audioUnitReverb, to: audioEngine.outputNode, format: nil)
+        audioPlayerNode.scheduleFile(audioFile, atTime: nil, completionHandler: nil)
+        audioEngine.startAndReturnError(nil)
+        audioPlayerNode.play()
+        
     }
 
 }
