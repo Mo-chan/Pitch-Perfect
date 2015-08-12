@@ -29,35 +29,33 @@ class PlaySoundsViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    @IBAction func playSlow(sender: UIButton) {
-        audioPlayer.stop()
-        audioPlayer.rate = 0.5
-        audioPlayer.currentTime = 0.0
-        audioPlayer.play()
+    @IBAction func playSlowAudio(sender: UIButton) {
+
+        playAudioWithVariableRate(0.5)
     }
-    @IBAction func playFast(sender: UIButton) {
-        audioPlayer.stop()
-        audioPlayer.rate = 2
-        audioPlayer.currentTime = 0.0
-        audioPlayer.play()
+    @IBAction func playFastAudio(sender: UIButton) {
+
+        playAudioWithVariableRate(2)
     }
     @IBAction func playChip(sender: UIButton) {
-         playAudioWithVariablePitch(1000)
+        
+        playAudioWithVariablePitch(1000)
     }
     @IBAction func playDarth(sender: UIButton) {
+        
         playAudioWithVariablePitch(-1000)
     }
     
     
     @IBAction func stopAudio(sender: UIButton) {
         audioPlayer.stop()
+        audioEngine.stop()
     }
 
-    func playAudioWithVariablePitch(pitch: Float){
-        audioPlayer.stop()
-        audioEngine.stop()
-        audioEngine.reset()
+    func playAudioWithVariablePitch(pitch: Float)
+    {
         
+        stopAllAudio()
         var audioPlayerNode = AVAudioPlayerNode()
         audioEngine.attachNode(audioPlayerNode)
         
@@ -74,14 +72,19 @@ class PlaySoundsViewController: UIViewController {
         audioPlayerNode.play()
     }
     
-    /*
-    // MARK: - Navigation
+    func playAudioWithVariableRate(rate: Float)
+    {
+        stopAllAudio()
+        audioPlayer.rate = rate
+        audioPlayer.currentTime = 0.0
+        audioPlayer.play()
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
     }
-    */
+    func stopAllAudio()
+    {
+        audioPlayer.stop()
+        audioEngine.stop()
+        audioEngine.reset()
+    }
 
 }

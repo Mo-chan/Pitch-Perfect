@@ -86,11 +86,11 @@
 				46126C361B7B34D30021E06F /* AppDelegate.swift */,
 				46211E9D1B7B3A1A005BA978 /* RecordedAudio.swift */,
 				46126C381B7B34D30021E06F /* RecordSoundViewController.swift */,
+				46211EA11B7B3EF9005BA978 /* PlaySoundsViewController.swift */,
 				46126C3A1B7B34D30021E06F /* Main.storyboard */,
 				46126C3D1B7B34D30021E06F /* Images.xcassets */,
 				46126C3F1B7B34D30021E06F /* LaunchScreen.xib */,
 				46126C341B7B34D30021E06F /* Supporting Files */,
-				46211EA11B7B3EF9005BA978 /* PlaySoundsViewController.swift */,
 				46211EA31B7B404E005BA978 /* movie_quote.mp3 */,
 			);
 			path = "Pitch Perfect";
