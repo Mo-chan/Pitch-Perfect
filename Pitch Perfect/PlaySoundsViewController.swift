@@ -17,10 +17,15 @@ class PlaySoundsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        audioPlayer = AVAudioPlayer(contentsOfURL: receivedAudio.filePathUrl, error: nil)
+        
+        do {
+            audioPlayer = try AVAudioPlayer(contentsOfURL: receivedAudio.filePathUrl, fileTypeHint: nil)
+        } catch {}
         audioPlayer.enableRate = true
         audioEngine = AVAudioEngine()
-        audioFile = AVAudioFile(forReading: receivedAudio.filePathUrl, error: nil)
+        do {
+        audioFile = try AVAudioFile(forReading: receivedAudio.filePathUrl!)
+        } catch {}
       
     }
 
@@ -55,10 +60,10 @@ class PlaySoundsViewController: UIViewController {
     {
         
         stopAllAudio()
-        var audioPlayerNode = AVAudioPlayerNode()
+        let audioPlayerNode = AVAudioPlayerNode()
         audioEngine.attachNode(audioPlayerNode)
         
-        var changePitchEffect = AVAudioUnitTimePitch()
+        let changePitchEffect = AVAudioUnitTimePitch()
         changePitchEffect.pitch = pitch
         audioEngine.attachNode(changePitchEffect)
         
@@ -66,8 +71,10 @@ class PlaySoundsViewController: UIViewController {
         audioEngine.connect(changePitchEffect, to: audioEngine.outputNode, format: nil)
         
         audioPlayerNode.scheduleFile(audioFile, atTime: nil, completionHandler: nil)
-        audioEngine.startAndReturnError(nil)
-        
+        //audioEngine.startAndReturnError(nil)
+        do {
+            try audioEngine.start()
+        } catch {}
         audioPlayerNode.play()
     }
     
@@ -89,16 +96,19 @@ class PlaySoundsViewController: UIViewController {
     func playAudioWithReverb()
     {
         stopAllAudio()
-        var audioPlayerNode = AVAudioPlayerNode()
+        let audioPlayerNode = AVAudioPlayerNode()
         audioEngine.attachNode(audioPlayerNode)
-        var audioUnitReverb = AVAudioUnitReverb()
+        let audioUnitReverb = AVAudioUnitReverb()
         audioUnitReverb.loadFactoryPreset(AVAudioUnitReverbPreset(rawValue: 0)!)
         audioUnitReverb.wetDryMix = 50.0
         audioEngine.attachNode(audioUnitReverb)
         audioEngine.connect(audioPlayerNode, to: audioUnitReverb, format: nil)
         audioEngine.connect(audioUnitReverb, to: audioEngine.outputNode, format: nil)
         audioPlayerNode.scheduleFile(audioFile, atTime: nil, completionHandler: nil)
-        audioEngine.startAndReturnError(nil)
+        //audioEngine.startAndReturnError(nil)
+        do {
+            try audioEngine.start()
+        } catch {}
         audioPlayerNode.play()
         
     }
